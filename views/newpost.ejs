@@ -1,0 +1,16 @@
+
+<div class="row justify-content-center">
+  <div class="col-md-7">
+    <div class="card p-4">
+      <h2>New Post</h2>
+      <% if (error) { %>
+        <div class="alert alert-danger"><%- error %></div>
+      <% } %>
+      <form method="POST">
+        <input class="form-control mb-2" name="title" placeholder="Title" required>
+        <textarea class="form-control mb-2" name="content" placeholder="Content" rows="6" required></textarea>
+        <button class="btn btn-primary w-100">Create Post</button>
+      </form>
+    </div>
+  </div>
+</div>
