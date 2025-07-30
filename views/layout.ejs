@@ -13,9 +13,11 @@
     <div>
       <ul class="navbar-nav ms-auto flex-row gap-2">
         <% if (user) { %>
+          <li class="nav-item"><a class="nav-link" href="/vuln">More Vulnerabilities</a></li>
           <li class="nav-item"><a class="nav-link" href="/profile"><%- user.username %></a></li>
           <li class="nav-item"><a class="nav-link" href="/logout">Logout</a></li>
         <% } else { %>
+          <li class="nav-item"><a class="nav-link" href="/vuln">More Vulnerabilities</a></li>
           <li class="nav-item"><a class="nav-link" href="/login">Login</a></li>
           <li class="nav-item"><a class="nav-link" href="/register">Register</a></li>
         <% } %>

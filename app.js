@@ -3,6 +3,7 @@ const session = require('express-session');
 const path = require('path');
 const expressLayouts = require('express-ejs-layouts');
 
+const vulnRoutes = require('./routes/vuln');
 const authRoutes = require('./routes/auth');
 const postRoutes = require('./routes/posts');
 const commentRoutes = require('./routes/comments');
@@ -32,5 +33,6 @@ app.get('/', (req, res) => res.redirect('/posts'));
 app.use('/', authRoutes);
 app.use('/posts', postRoutes);
 app.use('/comments', commentRoutes);
+app.use('/vuln', vulnRoutes);
 
 app.listen(3000, () => console.log('App running at http://localhost:3000'));

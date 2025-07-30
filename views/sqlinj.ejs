@@ -1,0 +1,8 @@
+<h2>SQL Injection Demo <span class="badge bg-danger">CVE-2023-23752</span></h2>
+<form method="POST">
+  <input class="form-control mb-2" name="username" placeholder="Username">
+  <button class="btn btn-primary">Search</button>
+</form>
+<% if (result) { %>
+  <div class="alert alert-info mt-2"><%= result %></div>
+<% } %>

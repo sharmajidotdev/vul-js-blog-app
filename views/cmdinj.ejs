@@ -1,0 +1,8 @@
+<h2>Command Injection Demo <span class="badge bg-danger">CVE-2021-41773</span></h2>
+<form method="POST">
+  <input class="form-control mb-2" name="name" placeholder="Your Name">
+  <button class="btn btn-primary">Say Hello</button>
+</form>
+<% if (output) { %>
+  <div class="alert alert-info mt-2"><%= output %></div>
+<% } %>

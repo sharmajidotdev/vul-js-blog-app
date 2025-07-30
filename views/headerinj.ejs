@@ -1,0 +1,6 @@
+<h2>HTTP Header Injection Demo <span class="badge bg-danger">CVE-2016-10542</span></h2>
+<form method="POST">
+  <input class="form-control mb-2" name="header" placeholder="Header Value">
+  <button class="btn btn-primary">Send</button>
+</form>
+<p class="mt-2">Try inputting <code>test&#92;r&#92;nSet-Cookie: injected=1</code></p>

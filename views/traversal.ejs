@@ -1,0 +1,8 @@
+<h2>Path Traversal Demo <span class="badge bg-danger">CVE-2022-22965</span></h2>
+<form method="POST">
+  <input class="form-control mb-2" name="filename" placeholder="Filename">
+  <button class="btn btn-primary">Read File</button>
+</form>
+<% if (fileContent) { %>
+  <pre class="mt-2"><%= fileContent %></pre>
+<% } %>

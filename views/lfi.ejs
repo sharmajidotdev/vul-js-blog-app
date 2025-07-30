@@ -1,0 +1,8 @@
+<h2>Local File Inclusion Demo <span class="badge bg-danger">CVE-2018-1000525</span></h2>
+<form method="POST">
+  <input class="form-control mb-2" name="file" placeholder="File Path">
+  <button class="btn btn-primary">Include</button>
+</form>
+<% if (fileContent) { %>
+  <pre class="mt-2"><%= fileContent %></pre>
+<% } %>
