@@ -7,6 +7,33 @@ const { title } = require('process');
 router.get('/', (req, res) => {
   res.render('vuln', { title: 'Vulnerability Demos' });
 });
+
+// Open Redirect Vulnerability
+router.get('/redirect', (req, res) => {
+  // Vulnerable implementation - accepts any URL without validation
+  const redirectUrl = req.query.url;
+  
+  if (!redirectUrl) {
+    res.render('redirect', { title: 'Open Redirect Demo' });
+    return;
+  }
+
+  /* SECURE VERSION - Uncomment to fix the vulnerability
+  // Only allow internal redirects or specific trusted domains
+  const allowedDomains = ['example.com', 'trusted-site.com'];
+  const url = new URL(redirectUrl, 'http://placeholder.com');
+  
+  if (redirectUrl.startsWith('/') || allowedDomains.includes(url.hostname)) {
+    res.redirect(redirectUrl);
+  } else {
+    res.status(400).send('Invalid redirect URL');
+  }
+  return;
+  */
+
+  // VULNERABLE VERSION - Redirects to any URL without validation
+  res.redirect(redirectUrl);
+});
 // SQL Injection (simulated)
 router.get('/sqlinj', (req, res) => {
   res.render('sqlinj', { result: null, cve: 'CVE-2023-23752' , title: 'SQL Injection Demo' });
