@@ -7,6 +7,11 @@ exports.addComment = (req, res) => {
     postId: req.params.id,
     author: req.session.user.username,
     comment
+  }, (err, result) => {
+    if (err) {
+      console.error('Error adding comment:', err);
+      return res.status(500).send('Error adding comment');
+    }
+    res.redirect('/posts/' + req.params.id);
   });
-  res.redirect('/posts/' + req.params.id);
 };

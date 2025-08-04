@@ -7,9 +7,18 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
 </head>
 <body>
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-  <div class="container">
-    <a class="navbar-brand" href="/posts">XSS Blog</a>
+<!-- Animated Background -->
+<div class="background-animation">
+  <div class="blob"></div>
+  <div class="blob"></div>
+  <div class="blob"></div>
+</div>
+
+<!-- Content Wrapper -->
+<div class="content-wrapper">
+  <nav class="navbar navbar-expand-lg">
+    <div class="container">
+      <a class="navbar-brand" href="/posts">XSS Blog</a>
     <div>
       <ul class="navbar-nav ms-auto flex-row gap-2">
         <% if (user) { %>
@@ -28,5 +37,6 @@
 <div class="container mt-4">
   <%- body %>
 </div>
+</div> <!-- Close content-wrapper -->
 </body>
 </html>
