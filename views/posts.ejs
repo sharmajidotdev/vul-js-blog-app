@@ -9,12 +9,13 @@
 <div class="row">
   <% posts.forEach(post => { %>
     <div class="col-md-6 mb-3">
-      <div class="card p-3">
-        <!-- XSS in title -->
-        <h4><a href="/posts/<%- post.id %>"><%- post.title %></a></h4>
-        <div class="text-muted mb-2">by <%- post.author %></div>
-        <p><%= post.content.substring(0, 100) %>...</p>
-        <a href="/posts/<%- post.id %>" class="btn btn-link">Read More</a>
+      <div class="blog-card">
+        <div class="blog-card-content">
+          <h4 class="blog-card-title"><a href="/posts/<%- post.id %>"><%- post.title %></a></h4>
+          <div class="blog-card-author">by <%- post.author %></div>
+          <p class="blog-card-excerpt"><%= post.content.substring(0, 100) %>...</p>
+          <a href="/posts/<%- post.id %>" class="blog-card-link">Read More</a>
+        </div>
       </div>
     </div>
   <% }) %>

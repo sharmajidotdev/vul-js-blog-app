@@ -1,25 +1,36 @@
 
-<div class="card p-4 mb-4">
-  <!-- XSS in title and content -->
-  <h2><%- post.title %></h2>
-  <div class="text-muted mb-2">by <%- post.author %></div>
-  <p><%- post.content %></p>
+<div class="blog-post-container">
+  <article class="blog-post-full">
+    <h2 class="blog-post-title"><%- post.title %></h2>
+    <div class="blog-post-author">by <%- post.author %></div>
+    <div class="blog-post-content"><%- post.content %></div>
+  </article>
 </div>
-<h4>Comments</h4>
-<div class="mb-3">
-  <% comments.forEach(c => { %>
-    <div class="card p-2 mb-2">
-      <strong><%- c.author %>:</strong>
-      <!-- XSS in comment -->
-      <span><%- c.content %></span>
+
+<div class="comments-section">
+  <h4 class="comments-title">Comments</h4>
+  <div class="comments-container">
+    <% comments.forEach(c => { %>
+      <div class="comment-card">
+        <div class="comment-author"><%- c.author %></div>
+        <div class="comment-content"><%- c.content %></div>
+      </div>
+    <% }) %>
+  </div>
+
+  <% if (user) { %>
+    <form method="POST" action="/posts/<%- post.id %>/comment" class="comment-form">
+      <textarea 
+        class="comment-input" 
+        name="comment" 
+        placeholder="Share your thoughts..." 
+        required
+      ></textarea>
+      <button class="comment-submit">Post Comment</button>
+    </form>
+  <% } else { %>
+    <div class="login-prompt">
+      <span>Login to join the discussion</span>
     </div>
-  <% }) %>
+  <% } %>
 </div>
-<% if (user) { %>
-  <form method="POST" action="/posts/<%- post.id %>/comment">
-    <textarea class="form-control mb-2" name="comment" placeholder="Add a comment..." required></textarea>
-    <button class="btn btn-primary">Comment</button>
-  </form>
-<% } else { %>
-  <div class="alert alert-info">Login to comment.</div>
-<% } %>
