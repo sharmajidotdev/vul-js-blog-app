@@ -1,7 +1,12 @@
+/* Import Roboto font */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;600;700&display=swap');
+
 /* Modern Minimal Design with Glassmorphism */
 :root {
   --primary-color: #2563eb;
   --primary-light: #3b82f6;
+  --font-primary: 'Roboto', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: 'SF Mono', 'Consolas', 'Monaco', monospace;
   --secondary-color: #64748b;
   --background-color: #f0f4f8;
   --surface-color: rgba(255, 255, 255, 0.95);
@@ -63,7 +68,7 @@ body {
   background-size: 400% 400%;
   animation: gradientMove 15s ease infinite;
   color: var(--text-color);
-  font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+  font-family: var(--font-primary);
   line-height: 1.6;
   margin: 0;
   padding: 0;
@@ -316,7 +321,7 @@ p {
   margin-bottom: 1rem;
   font-weight: 700;
   letter-spacing: -0.02em;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family: var(--font-primary);
 }
 
 .post-meta {
@@ -324,7 +329,7 @@ p {
   font-size: 0.95rem;
   margin-bottom: 1.5rem;
   font-weight: 500;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family: var(--font-primary);
   display: inline-block;
   padding: 0.5rem 1rem;
   background: rgba(255, 255, 255, 0.2);
@@ -335,7 +340,7 @@ p {
   color: #333;
   line-height: 1.8;
   font-size: 1.1rem;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family: var(--font-primary);
   font-weight: 400;
 }
 
@@ -410,7 +415,7 @@ p {
   font-weight: 700;
   text-decoration: none;
   letter-spacing: -0.02em;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family: var(--font-primary);
   transition: color 0.3s ease;
   line-height: 1.4;
   display: block;
@@ -424,7 +429,7 @@ p {
   color: #666;
   font-size: 0.95rem;
   font-weight: 500;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family: var(--font-primary);
   margin-bottom: 1.25rem;
   display: inline-block;
   padding: 0.5rem 1rem;
@@ -436,7 +441,7 @@ p {
   color: #333;
   line-height: 1.8;
   font-size: 1.05rem;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family: var(--font-primary);
   font-weight: 400;
   margin-bottom: 1.5rem;
 }
@@ -446,7 +451,7 @@ p {
   font-weight: 600;
   text-decoration: none;
   font-size: 0.95rem;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family: var(--font-primary);
   display: inline-flex;
   align-items: center;
   transition: transform 0.3s ease;
@@ -525,6 +530,147 @@ p {
 
 .btn-primary:active {
   transform: translateY(1px);
+}
+
+/* Auth Pages Glassmorphism Styles */
+.auth-container {
+  min-height: 80vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 420px;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.1),
+    inset 0 1px 1px rgba(255, 255, 255, 0.2);
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.auth-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 
+    0 12px 48px rgba(0, 0, 0, 0.15),
+    inset 0 1px 1px rgba(255, 255, 255, 0.2);
+}
+
+.auth-content {
+  padding: 2.5rem;
+}
+
+.auth-title {
+  font-size: 2rem;
+  color: var(--text-color);
+  font-weight: 700;
+  margin-bottom: 2rem;
+  text-align: center;
+  letter-spacing: -0.02em;
+  background: linear-gradient(45deg, var(--primary-color), var(--primary-light));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.auth-form {
+  margin-bottom: 1.5rem;
+}
+
+.input-group {
+  position: relative;
+  margin-bottom: 1.5rem;
+}
+
+.input-group i {
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.1rem;
+  color: var(--primary-color);
+  transition: all 0.3s ease;
+}
+
+.auth-input {
+  width: 100%;
+  padding: 1rem 1rem 1rem 3rem;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: var(--text-color);
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+}
+
+.auth-input:focus {
+  outline: none;
+  background: rgba(255, 255, 255, 0.25);
+  border-color: rgba(255, 255, 255, 0.3);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.auth-input:focus + i {
+  color: var(--primary-light);
+  transform: translateY(-50%) scale(1.1);
+}
+
+.auth-button {
+  width: 100%;
+  padding: 1rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: white;
+  background: linear-gradient(45deg, var(--primary-color), var(--primary-light));
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+}
+
+.auth-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px rgba(37, 99, 235, 0.3);
+}
+
+.auth-button i {
+  transition: transform 0.3s ease;
+}
+
+.auth-button:hover i {
+  transform: translateX(4px);
+}
+
+.auth-footer {
+  text-align: center;
+  color: var(--text-color);
+  font-size: 0.95rem;
+}
+
+.auth-link {
+  color: var(--primary-color);
+  text-decoration: none;
+  font-weight: 600;
+  margin-left: 0.5rem;
+  transition: color 0.3s ease;
+}
+
+.auth-link:hover {
+  color: var(--primary-light);
 }
 
 /* Modern Minimalist Forms */
@@ -619,7 +765,7 @@ p {
   color: #1a1a1a;
   font-weight: 800;
   letter-spacing: -0.03em;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family: var(--font-primary);
   transition: all 0.3s ease;
 }
 
@@ -649,7 +795,7 @@ p {
   font-size: 1.15rem;
   color: #333;
   font-weight: 400;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family: var(--font-primary);
   letter-spacing: -0.01em;
 }
 
@@ -677,7 +823,7 @@ p {
   letter-spacing: -0.03em;
   line-height: 1.3;
   margin-bottom: 1.5rem;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family: var(--font-primary);
 }
 
 .blog-post-author {
@@ -685,7 +831,7 @@ p {
   color: #666;
   font-size: 1rem;
   font-weight: 500;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family: var(--font-primary);
   margin-bottom: 2rem;
   padding: 0.75rem 1.5rem;
   background: rgba(255, 255, 255, 0.2);
@@ -696,7 +842,7 @@ p {
   color: #333;
   line-height: 1.9;
   font-size: 1.2rem;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family: var(--font-primary);
   font-weight: 400;
 }
 
@@ -712,7 +858,7 @@ p {
   color: #1a1a1a;
   font-weight: 700;
   margin-bottom: 2rem;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family: var(--font-primary);
 }
 
 .comments-container {
@@ -739,14 +885,14 @@ p {
   color: #1a1a1a;
   font-size: 1.1rem;
   margin-bottom: 0.75rem;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family: var(--font-primary);
 }
 
 .comment-content {
   color: #333;
   line-height: 1.7;
   font-size: 1.05rem;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family: var(--font-primary);
 }
 
 .comment-form {
@@ -767,7 +913,7 @@ p {
   min-height: 120px;
   color: #333;
   font-size: 1.05rem;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family: var(--font-primary);
   margin-bottom: 1rem;
   transition: all 0.3s ease;
   resize: vertical;
@@ -789,7 +935,7 @@ p {
   border-radius: 12px;
   cursor: pointer;
   transition: all 0.3s ease;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family: var(--font-primary);
 }
 
 .comment-submit:hover {
@@ -807,7 +953,7 @@ p {
   color: #666;
   font-size: 1.1rem;
   font-weight: 500;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family: var(--font-primary);
 }
 
 /* New Post Form */
@@ -925,7 +1071,7 @@ code {
   background-color: #f1f5f9;
   padding: 0.2em 0.4em;
   border-radius: 4px;
-  font-family: 'SF Mono', 'Consolas', 'Monaco', monospace;
+  font-family: var(--font-mono);
   font-size: 0.9em;
 }
 
