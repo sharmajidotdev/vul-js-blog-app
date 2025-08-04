@@ -1,16 +1,4 @@
 
-<!-- Add to views/posts.ejs or your main navigation -->
-<div class="mb-4">
-  <h4>Vulnerability Demos</h4>
-  <ul>
-    <li><a href="/vuln/sqlinj">SQL Injection (CVE-2023-23752)</a></li>
-    <li><a href="/vuln/cmdinj">Command Injection (CVE-2021-41773)</a></li>
-    <li><a href="/vuln/traversal">Path Traversal (CVE-2022-22965)</a></li>
-    <li><a href="/vuln/headerinj">HTTP Header Injection (CVE-2016-10542)</a></li>
-    <li><a href="/vuln/redirect">Open Redirect (CVE-2022-3602)</a></li>
-    <li><a href="/vuln/lfi">Local File Inclusion (CVE-2018-1000525)</a></li>
-  </ul>
-</div>
 
 <div class="d-flex justify-content-between align-items-center mb-3">
   <h2>Blog Posts</h2>
@@ -25,7 +13,7 @@
         <!-- XSS in title -->
         <h4><a href="/posts/<%- post.id %>"><%- post.title %></a></h4>
         <div class="text-muted mb-2">by <%- post.author %></div>
-        <p><%- post.content.substring(0, 100) %>...</p>
+        <p><%= post.content.substring(0, 100) %>...</p>
         <a href="/posts/<%- post.id %>" class="btn btn-link">Read More</a>
       </div>
     </div>
