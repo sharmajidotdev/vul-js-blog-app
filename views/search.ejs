@@ -1,0 +1,26 @@
+<div class="container">
+    <h1>Blog Search</h1>
+        
+        <form action="/search" method="GET">
+            <input type="text" name="q" value="<%= query %>" placeholder="Search posts...">
+            <button type="submit">Search</button>
+        </form>
+
+        <h2>Search Results for: <%= query %></h2>
+        
+        <div class="results">
+            <% if (results.length === 0) { %>
+                <p>No results found.</p>
+            <% } else { %>
+                <% results.forEach(function(post) { %>
+                    <div class="post">
+                        <a href="/posts/<%= post.id %>" class="post-link">
+                            <h3><%= post.title %></h3>
+                            <p><%= post.content.substring(0, 200) %>...</p>
+                            <small class="read-more">Click to read more →</small>
+                        </a>
+                    </div>
+                <% }); %>
+            <% } %>
+        </div>
+    </div>

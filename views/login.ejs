@@ -6,24 +6,35 @@
       <% if (error) { %>
         <div class="alert alert-danger"><%- error %></div>
       <% } %>
-      <form method="POST" class="auth-form">
+      <form method="POST" class="auth-form" id="loginForm">
         <div class="form-group">
           <div class="input-group">
             <i class="fas fa-user"></i>
             <input class="auth-input" name="username" placeholder="Username" required>
           </div>
+          <div class="invalid-feedback" style="color:red"></div>
         </div>
         <div class="form-group">
           <div class="input-group">
             <i class="fas fa-lock"></i>
             <input class="auth-input" name="password" type="password" placeholder="Password" required>
           </div>
+          <div class="invalid-feedback" style="color:red"></div>
         </div>
         <button class="auth-button">
           <span>Login</span>
           <i class="fas fa-arrow-right"></i>
         </button>
       </form>
+      <!-- <script src="/validation.js"></script>
+      <script>
+        document.addEventListener('DOMContentLoaded', function() {
+          attachValidation(document.getElementById('loginForm'), {
+            username: { required: true, pattern: /^[a-zA-Z0-9_]{3,20}$/, message: '3-20 chars, letters, numbers, _' },
+            password: { required: true, pattern: /^.{6,}$/, message: 'At least 6 characters.' }
+          });
+        });
+      </script> -->
       <div class="auth-footer">
         <span>No account?</span>
         <a href="/register" class="auth-link">Register</a>

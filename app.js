@@ -7,6 +7,7 @@ const vulnRoutes = require('./routes/vuln');
 const authRoutes = require('./routes/auth');
 const postRoutes = require('./routes/posts');
 const commentRoutes = require('./routes/comments');
+const searchRoutes = require('./routes/search');
 
 const app = express();
 
@@ -34,5 +35,6 @@ app.use('/', authRoutes);
 app.use('/posts', postRoutes);
 app.use('/comments', commentRoutes);
 app.use('/vuln', vulnRoutes);
+app.use('/', searchRoutes);
 
 app.listen(3000, () => console.log('App running at http://localhost:3000'));

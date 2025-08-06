@@ -18,6 +18,13 @@
 <!-- Content Wrapper -->
 <div class="content-wrapper">
   <nav class="navbar navbar-expand-lg">
+    <!-- Add search form in navigation -->
+    <div class="search-form">
+      <form action="/search" method="GET" class="d-flex">
+        <input type="text" name="q" class="form-control" placeholder="Search posts...">
+        <button type="submit" class="btn btn-primary">Search</button>
+      </form>
+    </div>
     <div class="container">
       <a class="navbar-brand" href="/posts">
         <span class="brand-text">XSS Blog</span>
