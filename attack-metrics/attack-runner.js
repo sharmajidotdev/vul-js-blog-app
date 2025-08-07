@@ -1,8 +1,10 @@
 // attack-metrics/attack-runner.js
 // Automated attack runner for XSS, SQLi, and other attacks
 
+
 const axios = require('axios');
 const fs = require('fs');
+const { getXssPayloads, getSqliPayloads } = require('./attack-payloads');
 
 class AttackRunner {
   constructor(baseUrl) {
@@ -20,9 +22,7 @@ class AttackRunner {
   }
 
   async runXSSAttacks() {
-    const xssPayloads = fs.readFileSync('./Vulnerabilty-samples/xss_payloads_48.csv', 'utf-8')
-      .split('\n')
-      .slice(1);
+    const xssPayloads = getXssPayloads();
     for (const payload of xssPayloads) {
       try {
         const res = await axios.post(`${this.baseUrl}/posts/new`, {
@@ -55,14 +55,7 @@ class AttackRunner {
   }
 
   async runSQLiAttacks() {
-    const sqlPayloads = [
-      "' OR '1'='1",
-      "admin' --",
-      "' OR 1=1--",
-      "' UNION SELECT * FROM users--",
-      "' OR id IS NOT NULL OR '1'='1",
-      "' OR '' = '"
-    ];
+    const sqlPayloads = getSqliPayloads();
     for (const payload of sqlPayloads) {
       try {
         const res = await axios.post(`${this.baseUrl}/login`, {

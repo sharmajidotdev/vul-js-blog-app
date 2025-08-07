@@ -25,21 +25,39 @@ function calculateMetrics(report) {
       failedAttacks: 0,
       successRate: 0,
       breakdown: {},
+      breakdownAttempts: {},
+      breakdownBlocked: {},
       overallScore: 0,
       vulnScores: {},
       summary: {}
     };
   }
   const results = report.results;
-  const breakdown = {
-    postXss: results.postXss?.length || 0,
-    commentXss: results.commentXss?.length || 0,
-    searchXss: results.searchXss?.length || 0,
-    loginSqli: results.loginSqli?.length || 0,
-    searchSqli: results.searchSqli?.length || 0
+  // Define attack types
+  const attackTypes = ['postXss', 'commentXss', 'searchXss', 'loginSqli', 'searchSqli'];
+  // Get payload counts for each type
+  const payloadCounts = {
+    postXss: require('./attack-payloads').getXssPayloads().length,
+    commentXss: require('./attack-payloads').getXssPayloads().length,
+    searchXss: require('./attack-payloads').getXssPayloads().length,
+    loginSqli: require('./attack-payloads').getSqliPayloads().length,
+    searchSqli: require('./attack-payloads').getSqliPayloads().length
   };
-  let vulnerabilities = breakdown.postXss + breakdown.commentXss + breakdown.searchXss + breakdown.loginSqli + breakdown.searchSqli;
-  let totalAttacks = vulnerabilities + (results.errors?.length || 0);
+  // Calculate per-type attempted and blocked
+  const breakdown = {};
+  const breakdownAttempts = {};
+  const breakdownBlocked = {};
+  let vulnerabilities = 0;
+  let totalAttacks = 0;
+  for (const type of attackTypes) {
+    const attempted = payloadCounts[type];
+    const successful = results[type]?.length || 0;
+    breakdown[type] = successful;
+    breakdownAttempts[type] = attempted;
+    breakdownBlocked[type] = attempted - successful;
+    vulnerabilities += successful;
+    totalAttacks += attempted;
+  }
   let failedAttacks = results.errors?.length || 0;
   let successRate = totalAttacks > 0 ? ((vulnerabilities / totalAttacks) * 100).toFixed(2) : 0;
   // Per-vulnerability scores (weights can be tuned)
@@ -61,6 +79,9 @@ function calculateMetrics(report) {
     penalty += breakdown[type] * (weights[type] || 1);
   }
   let secureness = Math.max(0, maxScore - penalty);
+  // Calculate both success rates for UI
+  const successRateBlocked = totalAttacks > 0 ? ((totalAttacks - vulnerabilities) / totalAttacks * 100).toFixed(2) : '0.00';
+  const successRateAttacker = totalAttacks > 0 ? ((vulnerabilities / totalAttacks) * 100).toFixed(2) : '0.00';
   // Summary for easy reporting
   const summary = {
     overallScore,
@@ -69,7 +90,11 @@ function calculateMetrics(report) {
     totalAttacks,
     failedAttacks,
     successRate: Number(successRate),
-    breakdown
+    successRateBlocked: Number(successRateBlocked),
+    successRateAttacker: Number(successRateAttacker),
+    breakdown,
+    breakdownAttempts,
+    breakdownBlocked
   };
   return {
     secureness,
@@ -77,7 +102,11 @@ function calculateMetrics(report) {
     totalAttacks,
     failedAttacks,
     successRate: Number(successRate),
+    successRateBlocked: Number(successRateBlocked),
+    successRateAttacker: Number(successRateAttacker),
     breakdown,
+    breakdownAttempts,
+    breakdownBlocked,
     details: results,
     overallScore,
     vulnScores,
