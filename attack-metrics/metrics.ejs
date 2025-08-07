@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Attack Metrics</title>
+    <link rel="stylesheet" href="/public/styles.css">
+</head>
+<body>
+<div class="container">
+    <h1>Attack Metrics</h1>
+    <button id="attackBtn" class="btn">Run Attack</button>
+    <span id="attackStatus" style="margin-left:1em;"></span>
+    <div id="metrics-summary" style="margin-top:2em;">
+        <p><strong>Secureness:</strong> <span id="secureness"></span></p>
+        <p><strong>Overall Score:</strong> <span id="overallScore"></span></p>
+        <p><strong>Total Vulnerabilities:</strong> <span id="vulnerabilities"></span></p>
+        <p><strong>Total Attacks:</strong> <span id="totalAttacks"></span></p>
+        <p><strong>Failed Attacks:</strong> <span id="failedAttacks"></span></p>
+        <p><strong>Success Rate:</strong> <span id="successRate"></span>%</p>
+        <h4>Breakdown</h4>
+        <ul id="breakdown"></ul>
+        <h4>Vulnerability Scores</h4>
+        <ul id="vulnScores"></ul>
+        <h4>Summary</h4>
+        <pre id="summaryJson" style="background:#f8f8f8; padding:1em; border-radius:5px; max-height:200px; overflow:auto;"></pre>
+    </div>
+    <h4>Raw JSON</h4>
+    <pre id="rawJson" style="background:#f8f8f8; padding:1em; border-radius:5px; max-height:300px; overflow:auto;"></pre>
+    <button id="downloadBtn" class="btn">Download JSON</button>
+</div>
+<script>
+async function fetchMetrics() {
+    const res = await fetch('/metrics/attack-metrics');
+    const data = await res.json();
+    document.getElementById('secureness').textContent = data.secureness;
+    document.getElementById('overallScore').textContent = data.overallScore;
+    document.getElementById('vulnerabilities').textContent = data.vulnerabilities;
+    document.getElementById('totalAttacks').textContent = data.totalAttacks;
+    document.getElementById('failedAttacks').textContent = data.failedAttacks;
+    document.getElementById('successRate').textContent = data.successRate;
+    // Breakdown
+    const breakdown = data.breakdown || {};
+    const breakdownList = document.getElementById('breakdown');
+    breakdownList.innerHTML = '';
+    for (const [k, v] of Object.entries(breakdown)) {
+        const li = document.createElement('li');
+        li.textContent = `${k}: ${v}`;
+        breakdownList.appendChild(li);
+    }
+    // VulnScores
+    const vulnScores = data.vulnScores || {};
+    const vulnScoresList = document.getElementById('vulnScores');
+    vulnScoresList.innerHTML = '';
+    for (const [k, v] of Object.entries(vulnScores)) {
+        const li = document.createElement('li');
+        li.textContent = `${k}: ${v}`;
+        vulnScoresList.appendChild(li);
+    }
+    // Summary
+    document.getElementById('summaryJson').textContent = JSON.stringify(data.summary, null, 2);
+    // Raw JSON
+    document.getElementById('rawJson').textContent = JSON.stringify(data, null, 2);
+    document.getElementById('downloadBtn').onclick = function() {
+        const blob = new Blob([JSON.stringify(data, null, 2)], {type: 'application/json'});
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'attack-metrics.json';
+        a.click();
+        URL.revokeObjectURL(url);
+    };
+}
+
+document.getElementById('attackBtn').onclick = async function() {
+    document.getElementById('attackStatus').textContent = 'Running attack...';
+    const res = await fetch('/attack', { method: 'POST' });
+    if (res.ok) {
+        document.getElementById('attackStatus').textContent = 'Attack complete!';
+        await fetchMetrics();
+    } else {
+        document.getElementById('attackStatus').textContent = 'Attack failed!';
+    }
+};
+
+fetchMetrics();
+</script>
+</body>
+</html>

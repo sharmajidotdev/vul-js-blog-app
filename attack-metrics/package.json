@@ -1,0 +1,15 @@
+{
+  "name": "attack-metrics",
+  "version": "1.0.0",
+  "main": "server.js",
+  "description": "Automated attack runner and metrics dashboard for security research.",
+  "scripts": {
+    "start": "node server.js",
+    "attack": "node attack-runner.js"
+  },
+  "dependencies": {
+    "express": "^4.18.4",
+    "ejs": "^3.1.9",
+    "axios": "^1.6.2"
+  }
+}
