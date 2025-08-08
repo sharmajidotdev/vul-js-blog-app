@@ -33,37 +33,41 @@ function calculateMetrics(report) {
     };
   }
   const results = report.results;
-  // Define attack types
-  const attackTypes = ['postXss', 'commentXss', 'searchXss', 'loginSqli', 'searchSqli'];
-  // Get payload counts for each type
-  const payloadCounts = {
-    postXss: require('./attack-payloads').getXssPayloads().length,
-    commentXss: require('./attack-payloads').getXssPayloads().length,
-    searchXss: require('./attack-payloads').getXssPayloads().length,
-    loginSqli: require('./attack-payloads').getSqliPayloads().length,
-    searchSqli: require('./attack-payloads').getSqliPayloads().length
-  };
-  // Calculate per-type attempted and blocked
+  // Dynamically detect attack types from report
+  const attackTypes = Object.keys(results).filter(k => k !== 'errors');
+  // Calculate per-type attempted and blocked based on actual report data
   const breakdown = {};
   const breakdownAttempts = {};
   const breakdownBlocked = {};
   let vulnerabilities = 0;
   let totalAttacks = 0;
   for (const type of attackTypes) {
-    const attempted = payloadCounts[type];
-    const successful = results[type]?.length || 0;
+    const attempted = Array.isArray(results[type]) ? results[type].length : 0;
+    const successful = attempted; // In this model, all attempted == successful (since only successes are stored)
     breakdown[type] = successful;
     breakdownAttempts[type] = attempted;
-    breakdownBlocked[type] = attempted - successful;
+    breakdownBlocked[type] = 0; // We don't know blocked unless runner logs them
     vulnerabilities += successful;
     totalAttacks += attempted;
   }
   let failedAttacks = results.errors?.length || 0;
+  // If errors are per-payload, treat as attempted but not successful
+  for (const err of results.errors || []) {
+    if (err && err.type && breakdownAttempts.hasOwnProperty(err.type)) {
+      breakdownAttempts[err.type] += 1;
+      breakdownBlocked[err.type] += 1;
+      totalAttacks += 1;
+    }
+  }
+  // Now blocked = attempted - successful
+  for (const type of attackTypes) {
+    breakdownBlocked[type] = breakdownAttempts[type] - breakdown[type];
+  }
   let successRate = totalAttacks > 0 ? ((vulnerabilities / totalAttacks) * 100).toFixed(2) : 0;
   // Per-vulnerability scores (weights can be tuned)
   const vulnScores = {
-    xss: scoreVuln(breakdown.postXss + breakdown.commentXss + breakdown.searchXss, 0.8, 0.5, 0.7),
-    sqli: scoreVuln(breakdown.loginSqli + breakdown.searchSqli, 0.9, 0.6, 0.8),
+    xss: scoreVuln((breakdown.postXss||0) + (breakdown.commentXss||0) + (breakdown.searchXss||0), 0.8, 0.5, 0.7),
+    sqli: scoreVuln((breakdown.loginSqli||0) + (breakdown.searchSqli||0), 0.9, 0.6, 0.8),
     openRedirect: scoreVuln(0, 0.5, 0.3, 0.4),
     lfi: scoreVuln(0, 0.7, 0.4, 0.6)
   };

@@ -4,7 +4,7 @@
     <div class="card p-4">
       <h2>New Post</h2>
       <% if (error) { %>
-        <div class="alert alert-danger"><%- error %></div>
+        <div class="alert alert-danger"><%= error %></div>
       <% } %>
       <form method="POST">
         <input class="form-control mb-2" name="title" placeholder="Title" required>

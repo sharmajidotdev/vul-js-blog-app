@@ -6,7 +6,7 @@
       <p>
         <strong>Username:</strong>
         <!-- XSS vulnerability: username is not escaped -->
-        <span><%- user.username %></span>
+        <span><%= user.username %></span>
       </p>
       <a href="/posts" class="btn btn-secondary">Back to Posts</a>
     </div>

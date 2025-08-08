@@ -22,6 +22,9 @@
             <strong>Success Rate (Blocked):</strong> <span id="successRateBlocked"></span>%<br>
             <strong>Breakdown (Blocked):</strong>
             <ul id="breakdownBlocked"></ul>
+            <details style="margin-top:1em;"><summary><b>Failed Payloads (Blocked)</b></summary>
+              <ul id="failedPayloads"></ul>
+            </details>
           </td>
           <td style="vertical-align:top;background:#fbe8e8;padding:1em;border-radius:8px;">
             <strong>Successful Attacks:</strong> <span id="vulnerabilities"></span><br>
@@ -29,6 +32,9 @@
             <strong>Success Rate (Attacker):</strong> <span id="successRateAttacker"></span>%<br>
             <strong>Breakdown (Successful):</strong>
             <ul id="breakdown"></ul>
+            <details style="margin-top:1em;"><summary><b>Success Payloads</b></summary>
+              <ul id="successPayloads"></ul>
+            </details>
           </td>
         </tr>
       </table>
@@ -41,10 +47,45 @@
 </div>
 <script>
 async function fetchMetrics() {
+
+    // Always fetch data first
     const res = await fetch('/metrics/attack-metrics');
-    console.log('Response:', res);
     const data = await res.json();
-    console.log('Data:', data);
+
+    // Show failed payloads (blocked)
+    const failedPayloadsList = document.getElementById('failedPayloads');
+    failedPayloadsList.innerHTML = '';
+    if (data.details && Array.isArray(data.details.errors)) {
+      for (const err of data.details.errors) {
+        const li = document.createElement('li');
+        li.textContent = `${err.type}: ${err.payload} | ${err.error || ''}`;
+        if (err.responseSnippet) {
+          const pre = document.createElement('pre');
+          pre.textContent = err.responseSnippet;
+          li.appendChild(pre);
+        }
+        failedPayloadsList.appendChild(li);
+      }
+    }
+
+    // Show success payloads (vulnerable)
+    const successPayloadsList = document.getElementById('successPayloads');
+    successPayloadsList.innerHTML = '';
+    if (data.details) {
+      for (const [type, arr] of Object.entries(data.details)) {
+        if (type === 'errors' || !Array.isArray(arr)) continue;
+        for (const entry of arr) {
+          const li = document.createElement('li');
+          li.textContent = `${type}: ${entry.payload}`;
+          if (entry.responseSnippet) {
+            const pre = document.createElement('pre');
+            pre.textContent = entry.responseSnippet;
+            li.appendChild(pre);
+          }
+          successPayloadsList.appendChild(li);
+        }
+      }
+    }
     // Only update elements that exist in the DOM
     const elBlocked = document.getElementById('blockedAttacks');
     const elFailed = document.getElementById('failedAttacks');

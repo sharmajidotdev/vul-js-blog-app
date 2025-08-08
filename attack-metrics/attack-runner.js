@@ -24,30 +24,99 @@ class AttackRunner {
   async runXSSAttacks() {
     const xssPayloads = getXssPayloads();
     for (const payload of xssPayloads) {
+      if (!payload || !payload.trim()) continue; // skip empty payloads
       try {
         const res = await axios.post(`${this.baseUrl}/posts/new`, {
           title: payload,
           content: 'XSS test content'
         });
-        this.results.postXss.push({payload, status: res.status});
+        const responseStr = res.data && typeof res.data === 'string' ? res.data : '';
+        const encoded = encodeURIComponent(payload);
+        const htmlEncoded = payload.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+        if (
+          responseStr.includes(payload) ||
+          responseStr.includes(encoded) ||
+          responseStr.includes(htmlEncoded)
+        ) {
+          this.results.postXss.push({
+            payload,
+            status: res.status,
+            reflected: true,
+            responseSnippet: responseStr.substring(0, 300)
+          });
+        } else {
+          this.results.errors.push({
+            type: 'postXss',
+            payload,
+            error: 'Payload not reflected',
+            status: res.status,
+            responseSnippet: responseStr.substring(0, 300)
+          });
+        }
       } catch (e) {
         this.results.errors.push({type: 'postXss', payload, error: e.message});
       }
     }
     for (const payload of xssPayloads) {
+      if (!payload || !payload.trim()) continue;
       try {
         const res = await axios.post(`${this.baseUrl}/posts/1/comment`, {
           comment: payload
         });
-        this.results.commentXss.push({payload, status: res.status});
+        const responseStr = res.data && typeof res.data === 'string' ? res.data : '';
+        const encoded = encodeURIComponent(payload);
+        const htmlEncoded = payload.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+        if (
+          responseStr.includes(payload) ||
+          responseStr.includes(encoded) ||
+          responseStr.includes(htmlEncoded)
+        ) {
+          this.results.commentXss.push({
+            payload,
+            status: res.status,
+            reflected: true,
+            responseSnippet: responseStr.substring(0, 300)
+          });
+        } else {
+          this.results.errors.push({
+            type: 'commentXss',
+            payload,
+            error: 'Payload not reflected',
+            status: res.status,
+            responseSnippet: responseStr.substring(0, 300)
+          });
+        }
       } catch (e) {
         this.results.errors.push({type: 'commentXss', payload, error: e.message});
       }
     }
     for (const payload of xssPayloads) {
+      if (!payload || !payload.trim()) continue;
       try {
         const res = await axios.get(`${this.baseUrl}/search?q=${encodeURIComponent(payload)}`);
-        this.results.searchXss.push({payload, status: res.status});
+        const responseStr = res.data && typeof res.data === 'string' ? res.data : '';
+        const encoded = encodeURIComponent(payload);
+        const htmlEncoded = payload.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+        if (
+          responseStr.includes(payload) ||
+          responseStr.includes(encoded) ||
+          responseStr.includes(htmlEncoded)
+        ) {
+          this.results.searchXss.push({
+            payload,
+            status: res.status,
+            reflected: true,
+            responseSnippet: responseStr.substring(0, 300)
+          });
+        } else {
+          this.results.errors.push({
+            type: 'searchXss',
+            payload,
+            error: 'Payload not reflected',
+            status: res.status,
+            responseSnippet: responseStr.substring(0, 300)
+          });
+        }
       } catch (e) {
         this.results.errors.push({type: 'searchXss', payload, error: e.message});
       }
@@ -62,7 +131,23 @@ class AttackRunner {
           username: payload,
           password: 'anything'
         });
-        this.results.loginSqli.push({payload, status: res.status, data: res.data});
+        // Heuristic: If login is bypassed, response does not contain 'Invalid credentials'
+        if (res.data && typeof res.data === 'string' && !res.data.includes('Invalid credentials')) {
+          this.results.loginSqli.push({
+            payload,
+            status: res.status,
+            bypassed: true,
+            responseSnippet: res.data.substring(0, 300)
+          });
+        } else {
+          this.results.errors.push({
+            type: 'loginSqli',
+            payload,
+            error: 'Login not bypassed',
+            status: res.status,
+            responseSnippet: res.data && typeof res.data === 'string' ? res.data.substring(0, 300) : ''
+          });
+        }
       } catch (e) {
         this.results.errors.push({type: 'loginSqli', payload, error: e.message});
       }
@@ -70,7 +155,23 @@ class AttackRunner {
     for (const payload of sqlPayloads) {
       try {
         const res = await axios.get(`${this.baseUrl}/search?q=${encodeURIComponent(payload)}`);
-        this.results.searchSqli.push({payload, status: res.status});
+        // Heuristic: Look for SQL error or payload reflected
+        if (res.data && typeof res.data === 'string' && (res.data.match(/sql/i) || res.data.includes(payload))) {
+          this.results.searchSqli.push({
+            payload,
+            status: res.status,
+            evidence: true,
+            responseSnippet: res.data.substring(0, 300)
+          });
+        } else {
+          this.results.errors.push({
+            type: 'searchSqli',
+            payload,
+            error: 'No SQLi evidence',
+            status: res.status,
+            responseSnippet: res.data && typeof res.data === 'string' ? res.data.substring(0, 300) : ''
+          });
+        }
       } catch (e) {
         this.results.errors.push({type: 'searchSqli', payload, error: e.message});
       }

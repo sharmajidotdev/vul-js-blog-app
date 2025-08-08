@@ -25,25 +25,25 @@ exports.login = async (req, res) => {
     // VULNERABLE CODE (current implementation - demonstrates SQL injection)
     // This is intentionally vulnerable to SQL injection!
     // DO NOT USE THIS IN PRODUCTION!
-    const query = `SELECT * FROM users WHERE username = '${username}' AND password = '${password}'`;
-    db.query(query, (err, results) => {
-      if (err || results.length === 0) {
-        return res.render('login', { error: 'Invalid credentials', title: 'Login' });
-      }
-      req.session.user = results[0];
-      res.redirect('/posts');
-    });
-
-    /* SECURE CODE - Uncomment this block and comment out the above block to prevent SQL injection
-    // Using parameterized queries to prevent SQL injection*/
-    // const secureQuery = 'SELECT * FROM users WHERE username = ? AND password = ?';
-    // db.query(secureQuery, [username, password], (err, results) => {
+    // const query = `SELECT * FROM users WHERE username = '${username}' AND password = '${password}'`;
+    // db.query(query, (err, results) => {
     //   if (err || results.length === 0) {
     //     return res.render('login', { error: 'Invalid credentials', title: 'Login' });
     //   }
     //   req.session.user = results[0];
     //   res.redirect('/posts');
     // });
+
+    /* SECURE CODE - Uncomment this block and comment out the above block to prevent SQL injection
+    // Using parameterized queries to prevent SQL injection*/
+    const secureQuery = 'SELECT * FROM users WHERE username = ? AND password = ?';
+    db.query(secureQuery, [username, password], (err, results) => {
+      if (err || results.length === 0) {
+        return res.render('login', { error: 'Invalid credentials', title: 'Login' });
+      }
+      req.session.user = results[0];
+      res.redirect('/posts');
+    });
     
   } catch (err) {
     res.render('login', { error: 'Login failed', title: 'Login' });

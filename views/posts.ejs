@@ -11,10 +11,10 @@
     <div class="col-md-6 mb-3">
       <div class="blog-card">
         <div class="blog-card-content">
-          <h4 class="blog-card-title"><a href="/posts/<%- post.id %>"><%- post.title %></a></h4>
-          <div class="blog-card-author">by <%- post.author %></div>
+          <h4 class="blog-card-title"><a href="/posts/<%= post.id %>"><%= post.title %></a></h4>
+          <div class="blog-card-author">by <%= post.author %></div>
           <p class="blog-card-excerpt"><%= post.content.substring(0, 100) %>...</p>
-          <a href="/posts/<%- post.id %>" class="blog-card-link">Read More</a>
+          <a href="/posts/<%= post.id %>" class="blog-card-link">Read More</a>
         </div>
       </div>
     </div>
