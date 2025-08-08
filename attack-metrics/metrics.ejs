@@ -107,27 +107,32 @@ async function fetchMetrics() {
     document.getElementById('totalAttacks').textContent = data.totalAttacks;
     document.getElementById('failedAttacks').textContent = data.failedAttacks;
     // document.getElementById('successRate').textContent = data.successRate;
-    // Breakdown (successful)
+    // Only show these types in breakdowns
+    const allowedTypes = ['searchXss', 'postXss', 'commentXss', 'loginSqli', 'searchSqli'];
     const breakdown = data.breakdown || {};
     const breakdownAttempts = data.breakdownAttempts || {};
     const breakdownBlocked = data.breakdownBlocked || {};
     const breakdownList = document.getElementById('breakdown');
     breakdownList.innerHTML = '';
-    for (const [k, v] of Object.entries(breakdown)) {
+    for (const k of allowedTypes) {
+      if (breakdown[k] !== undefined) {
         const attempted = breakdownAttempts[k] || 0;
         const li = document.createElement('li');
-        li.textContent = `${k}: ${v} / ${attempted} successful`;
+        li.textContent = `${k}: ${breakdown[k]} / ${attempted} successful`;
         breakdownList.appendChild(li);
+      }
     }
     // Breakdown (blocked)
     document.getElementById('blockedAttacks').textContent = blockedAttacks;
     const breakdownBlockedList = document.getElementById('breakdownBlocked');
     breakdownBlockedList.innerHTML = '';
-    for (const [k, blocked] of Object.entries(breakdownBlocked)) {
+    for (const k of allowedTypes) {
+      if (breakdownBlocked[k] !== undefined) {
         const attempted = breakdownAttempts[k] || 0;
         const li = document.createElement('li');
-        li.textContent = `${k}: ${blocked} / ${attempted} blocked`;
+        li.textContent = `${k}: ${breakdownBlocked[k]} / ${attempted} blocked`;
         breakdownBlockedList.appendChild(li);
+      }
     }
     // Summary
     // document.getElementById('summaryJson').textContent = JSON.stringify(data.summary, null, 2);
